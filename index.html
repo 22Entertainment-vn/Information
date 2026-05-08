@@ -2,9 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title>22 Entertainment VN - To high end and again!</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
             --purple-smoke: #4c117e;
@@ -14,12 +17,14 @@
             --dark-bg: #050505;
         }
 
+        /* Chống tràn ngang khi chạy hiệu ứng */
+        html, body { overflow-x: hidden; scroll-behavior: smooth; }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--dark-bg);
             color: #e0e0e0;
             margin: 0; padding: 0; line-height: 1.8;
-            overflow-x: hidden;
         }
 
         /* NÚT CHUYỂN NGÔN NGỮ */
@@ -50,6 +55,7 @@
         .manifesto-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: start; }
         .manifesto-text p { font-size: 1.25rem; color: #ccc; margin-bottom: 30px; text-align: justify; }
         .highlight-quote { border-left: 5px solid var(--purple-smoke); padding-left: 30px; font-size: 1.8rem; font-weight: 300; font-style: italic; color: var(--gold-crystal); margin: 60px 0; }
+        
         .approach-box { background: rgba(15, 15, 15, 0.8); border: 1px solid #222; padding: 50px; border-radius: 20px; backdrop-filter: blur(10px); }
         .approach-box h3 { font-weight: 800; color: var(--metal-silver); font-size: 1.6rem; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 40px; text-transform: uppercase;}
         .approach-list { list-style: none; padding: 0; }
@@ -69,7 +75,7 @@
         .event-tags span { background: #1a1a1a; border: 1px solid #333; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #ddd; text-transform: uppercase; }
 
         .brotherhood-section { padding: 100px 0; background: #080808; }
-        .brotherhood-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 100px; }
+        .brotherhood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 100px; }
         .artist-card { 
             background: linear-gradient(145deg, #111, #050505); border: 1px solid #1a1a1a; border-radius: 15px; 
             padding: 60px 30px; text-align: center; cursor: pointer; transition: 0.4s;
@@ -82,7 +88,8 @@
         .view-link { margin-top: 20px; display: inline-block; color: var(--gold-crystal); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; border-bottom: 1px solid var(--gold-crystal); padding-bottom: 5px;}
 
         .bts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 50px; }
-        .bts-card { background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 35px 25px; border-radius: 15px; display: flex; flex-direction: column; }
+        .bts-card { background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 35px 25px; border-radius: 15px; display: flex; flex-direction: column; transition: 0.3s; }
+        .bts-card:hover { background: rgba(255,255,255,0.08); }
         .bts-card h4 { color: var(--gold-crystal); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; min-height: 60px; display: flex; align-items: center;}
         .bts-card p { font-size: 0.85rem; color: #bbb; margin: 0; line-height: 1.6; }
 
@@ -94,7 +101,8 @@
         .main-cta-btn { display: inline-block; padding: 22px 50px; background: var(--gold-crystal); color: #000; text-decoration: none; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; border-radius: 50px; transition: 0.4s; margin: 20px 0; }
         .fb-btn { color: #aaa; text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid #444; padding-bottom: 5px; }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(25px); overflow-y: auto; }
+        /* MODALS (Z-INDEX PHẢI CAO HƠN AOS) */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { background: #0d0d0d; margin: 5% auto; padding: 60px; border: 1px solid #333; width: 90%; max-width: 800px; border-radius: 25px; position: relative; }
         .close-btn { color: #555; float: right; font-size: 50px; cursor: pointer; margin-top: -50px; }
         .modal-header { text-align: center; margin-bottom: 50px; }
@@ -102,12 +110,16 @@
         .modal-header .role-modal { color: var(--green-smoke); text-transform: uppercase; letter-spacing: 6px; font-size: 1.1rem; font-weight: 700; display: block; margin-top: 10px; }
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px;}
         .modal-section h4 { color: #fff; margin-bottom: 25px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; border-left: 3px solid var(--purple-smoke); padding-left: 15px;}
-        .social-btn { display: block; padding: 18px; background: #161616; color: #eee; text-decoration: none; border-radius: 10px; border: 1px solid #222; text-align: center; font-weight: 600; margin-bottom: 10px; transition: 0.3s;}
-        .social-btn:hover { background: var(--purple-smoke); color: #fff; }
+        
+        .social-btn { 
+            display: block; padding: 18px; background: #161616; color: #eee; 
+            text-decoration: none; border-radius: 10px; border: 1px solid #222; 
+            text-align: center; font-weight: 600; margin-bottom: 10px; 
+            transition: 0.3s; position: relative; z-index: 10001; cursor: pointer;
+        }
+        .social-btn:hover { background: var(--purple-smoke); color: #fff; border-color: var(--gold-crystal); }
         .info-box { background: rgba(55, 139, 102, 0.1); border-left: 5px solid var(--green-smoke); padding: 30px; border-radius: 10px; color: #bbb; line-height: 1.6; white-space: pre-line; }
 
-        @media (max-width: 1100px) { .bts-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 768px) { .manifesto-grid, .bts-grid, .modal-grid { grid-template-columns: 1fr; } header h1 { font-size: 3rem; letter-spacing: 10px; } }
     </style>
 </head>
 <body>
@@ -115,20 +127,20 @@
     <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">EN</button>
 
     <header>
-        <h1>22 ENTERTAINMENT</h1>
-        <p id="tagline">To high end and again!</p>
+        <h1 data-aos="zoom-out" data-aos-duration="1500">22 ENTERTAINMENT</h1>
+        <p id="tagline" data-aos="fade-up" data-aos-delay="500">To high end and again!</p>
     </header>
 
     <div class="container">
         <section class="manifesto-section">
             <div class="manifesto-grid">
-                <div class="manifesto-text">
+                <div class="manifesto-text" data-aos="fade-right">
                     <h2 id="m-title">ĐỊNH VỊ TRẢI NGHIỆM</h2>
                     <p id="m-desc"><strong>22 Entertainment VN</strong> không chỉ là một đơn vị tổ chức; chúng tôi là những người thiết kế phong cách sống. Với triết lý <strong>"To high end and again!"</strong>, chúng tôi cam kết mang đến những tiêu chuẩn giải trí thượng lưu, nơi mỗi khoảnh khắc đều được trau chuốt để trở thành một vòng lặp cảm xúc đầy lôi cuốn.</p>
-                    <div class="highlight-quote" id="m-quote">"Âm nhạc là mạch dẫn, văn hóa là ngôn ngữ kết nối những tâm hồn đồng điệu."</div>
+                    <div class="highlight-quote" id="m-quote" data-aos="fade-up" data-aos-delay="400">"Âm nhạc là mạch dẫn, văn hóa là ngôn ngữ kết nối những tâm hồn đồng điệu."</div>
                     <p id="m-desc2">Tại Hàm Tiến, Mũi Né, chúng tôi biến những không gian thiên nhiên hoang sơ thành những thánh đường nghệ thuật đương đại, nơi giá trị "High-end" được tái hiện một cách bền vững và đầy đam mê qua từng sự kiện.</p>
                 </div>
-                <div class="approach-box">
+                <div class="approach-box" data-aos="fade-left">
                     <h3 id="a-title">HỆ SINH THÁI TÍCH HỢP</h3>
                     <ul class="approach-list">
                         <li><h4 id="a-item1-h">✧ Nhạc Tuyển Chọn (Curation)</h4><p id="a-item1-p">Đặc trưng bởi Reggae, Dub, Afro, Deep House và nghệ thuật biểu diễn đĩa than (Vinyl).</p></li>
@@ -141,9 +153,9 @@
         </section>
 
         <section class="concepts-section">
-            <h2 id="c-title">DÒNG SỰ KIỆN ĐỊNH DANH</h2>
+            <h2 id="c-title" data-aos="fade-up">DÒNG SỰ KIỆN ĐỊNH DANH</h2>
             <div class="concepts-grid">
-                <div class="concept-card community">
+                <div class="concept-card community" data-aos="fade-up" data-aos-delay="100">
                     <h3 id="c1-h">Cộng Đồng & Đại Chúng</h3>
                     <p id="c1-p" class="concept-desc">Kiến tạo những điểm chạm văn hóa bùng nổ, nơi âm nhạc xóa nhòa khoảng cách và lan tỏa năng lượng tích cực đến hàng ngàn khán giả.</p>
                     <div class="event-tags" id="c1-tags">
@@ -153,7 +165,7 @@
                         <span>Hội chợ văn hóa sáng tạo</span>
                     </div>
                 </div>
-                <div class="concept-card private">
+                <div class="concept-card private" data-aos="fade-up" data-aos-delay="300">
                     <h3 id="c2-h">Riêng Tư & Đặc Quyền</h3>
                     <p id="c2-p" class="concept-desc">Những trải nghiệm được "đo ni đóng giày" cho từng không gian bí mật. Đề cao sự tinh tế, ấm cúng và kết nối cá nhân sâu sắc.</p>
                     <div class="event-tags" id="c2-tags">
@@ -167,28 +179,28 @@
         </section>
 
         <section class="brotherhood-section">
-            <h2 id="b-title">22 Brotherhood</h2>
-            <h3 id="b-subtitle" class="section-subtitle">Đội ngũ Nghệ sĩ</h3>
+            <h2 id="b-title" data-aos="fade-up">22 Brotherhood</h2>
+            <h3 id="b-subtitle" class="section-subtitle" data-aos="fade-up">Đội ngũ Nghệ sĩ</h3>
             <div class="brotherhood-grid">
-                <div class="artist-card" onclick="openModal('modal-s4tiva')"><span class="role" id="r-s4tiva">Selector, DJ</span><h3 class="name">S4TIVA</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
-                <div class="artist-card" onclick="openModal('modal-leen')"><span class="role" id="r-leen">Producer, DJ</span><h3 class="name">LEE NGUYEN</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
-                <div class="artist-card" onclick="openModal('modal-sion')"><span class="role" id="r-sion">Producer, DJ</span><h3 class="name">SION</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
-                <div class="artist-card" onclick="openModal('modal-alicoinslin')"><span class="role" id="r-ali">DJ</span><h3 class="name">ALICOINSLIN</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
-                <div class="artist-card" onclick="openModal('modal-2c')"><span class="role" id="r-2c">DJ</span><h3 class="name">2C</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
-                <div class="artist-card" onclick="openModal('modal-gk')"><span class="role" id="r-gk">Guitarist</span><h3 class="name">GK</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="100" onclick="openModal('modal-s4tiva')"><span class="role" id="r-s4tiva">Selector, DJ</span><h3 class="name">S4TIVA</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="200" onclick="openModal('modal-leen')"><span class="role" id="r-leen">Producer, DJ</span><h3 class="name">LEE NGUYEN</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="300" onclick="openModal('modal-sion')"><span class="role" id="r-sion">Producer, DJ</span><h3 class="name">SION</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="400" onclick="openModal('modal-alicoinslin')"><span class="role" id="r-ali">DJ</span><h3 class="name">ALICOINSLIN</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="500" onclick="openModal('modal-jayt')"><span class="role" id="r-jayt">DJ</span><h3 class="name">JayT</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
+                <div class="artist-card" data-aos="zoom-in" data-aos-delay="600" onclick="openModal('modal-dream')"><span class="role" id="r-dream">Guitarist</span><h3 class="name">Dream</h3><span class="view-link lang-detail">XEM CHI TIẾT</span></div>
             </div>
 
-            <h3 id="bts-title" class="section-subtitle">Phía sau sân khấu</h3>
+            <h3 id="bts-title" class="section-subtitle" data-aos="fade-up">Phía sau sân khấu</h3>
             <div class="bts-grid">
-                <div class="bts-card"><h4 id="bts1-h">Tổ chức & Vận hành</h4><p id="bts1-p">Đội ngũ chiến lược, quản lý dự án và điều phối dòng chảy của sự kiện.</p></div>
-                <div class="bts-card"><h4 id="bts2-h">Team Media</h4><p id="bts2-p">Lưu giữ và kể lại câu chuyện những khoảnh khắc qua hình ảnh và video.</p></div>
-                <div class="bts-card"><h4 id="bts3-h">Âm thanh & Ánh sáng</h4><p id="bts3-p">Hệ thống kĩ thuật tiêu chuẩn, thiết kế không gian thị giác & thính giác đồng điệu.</p></div>
-                <div class="bts-card"><h4 id="bts4-h">Team Hoạt náo</h4><p id="bts4-p">Luôn sẵn sàng với những cuộc vui, nhân tố nhiệt huyết dẫn đầu bày trò cho bữa tiệc bùng nổ.</p></div>
+                <div class="bts-card" data-aos="fade-up" data-aos-delay="100"><h4 id="bts1-h">Tổ chức & Vận hành</h4><p id="bts1-p">Đội ngũ chiến lược, quản lý dự án và điều phối dòng chảy của sự kiện.</p></div>
+                <div class="bts-card" data-aos="fade-up" data-aos-delay="200"><h4 id="bts2-h">Team Media</h4><p id="bts2-p">Lưu giữ và kể lại câu chuyện những khoảnh khắc qua hình ảnh và video.</p></div>
+                <div class="bts-card" data-aos="fade-up" data-aos-delay="300"><h4 id="bts3-h">Âm thanh & Ánh sáng</h4><p id="bts3-p">Hệ thống kĩ thuật tiêu chuẩn, thiết kế không gian thị giác & thính giác đồng điệu.</p></div>
+                <div class="bts-card" data-aos="fade-up" data-aos-delay="400"><h4 id="bts4-h">Team Hoạt náo</h4><p id="bts4-p">Luôn sẵn sàng với những cuộc vui, nhân tố nhiệt huyết dẫn đầu bày trò cho bữa tiệc bùng nổ.</p></div>
             </div>
         </section>
 
         <section class="contact-section">
-            <div class="contact-box">
+            <div class="contact-box" data-aos="zoom-in">
                 <h2 id="con-title">KẾT NỐI & ĐỒNG HÀNH</h2>
                 <div class="manager-info">
                     <span class="manager-role">Team Manager</span>
@@ -196,26 +208,110 @@
                 </div>
                 <div class="contact-details" id="con-phone">Liên hệ: 0358 913 420 (Zalo / WhatsApp)</div>
                 <a href="mailto:22entertainment.vn@gmail.com" class="main-cta-btn" id="con-btn">Gửi lời mời hợp tác</a>
-                <a href="https://www.facebook.com/share/1CNpiSyMrS/" target="_blank" class="fb-btn" id="con-fb">Truy cập Fanpage chính thức</a>
+                <a href="https://www.facebook.com/share/1CNpiSyMrS/" target="_blank" rel="noopener noreferrer" class="fb-btn" id="con-fb">Truy cập Fanpage chính thức</a>
             </div>
         </section>
     </div>
 
-    <div id="modal-s4tiva" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-s4tiva')">&times;</span><div class="modal-header"><h3>S4TIVA</h3><span class="role-modal" id="rm-s4tiva">Selector, DJ</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/1AuWhsM2tu/" target="_blank" class="social-btn">Facebook</a><a href="https://www.instagram.com/s4tiva.22ent/" target="_blank" class="social-btn">Instagram</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-s4tiva"></div></div></div></div></div>
-    <div id="modal-leen" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-leen')">&times;</span><div class="modal-header"><h3>LEE NGUYEN</h3><span class="role-modal" id="rm-leen">Producer, DJ</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/1ZH3XQuZeu/" target="_blank" class="social-btn">Facebook</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-leen"></div></div></div></div></div>
-    <div id="modal-sion" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-sion')">&times;</span><div class="modal-header"><h3>SION</h3><span class="role-modal" id="rm-sion">Producer, DJ</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/1BdXGiTT4u/" target="_blank" class="social-btn">Facebook</a><a href="https://www.instagram.com/sion_lvp/" target="_blank" class="social-btn">Instagram</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-sion"></div></div></div></div></div>
-    <div id="modal-alicoinslin" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-alicoinslin')">&times;</span><div class="modal-header"><h3>ALICOINSLIN</h3><span class="role-modal" id="rm-ali">DJ</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/1AzfYgkbhL/" target="_blank" class="social-btn">Facebook</a><a href="https://www.instagram.com/alicoinslin/" target="_blank" class="social-btn">Instagram</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-ali"></div></div></div></div></div>
-    <div id="modal-2c" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-2c')">&times;</span><div class="modal-header"><h3>2C</h3><span class="role-modal" id="rm-2c">DJ</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/18QNRNecXV/" target="_blank" class="social-btn">Facebook</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-2c"></div></div></div></div></div>
-    <div id="modal-gk" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-gk')">&times;</span><div class="modal-header"><h3>GK</h3><span class="role-modal" id="rm-gk">Guitarist</span></div><div class="modal-grid"><div class="modal-section"><h4 class="lang-con">Kết nối</h4><div class="social-links"><a href="https://www.facebook.com/share/1ChTjARzuP/" target="_blank" class="social-btn">Facebook</a></div></div><div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-gk"></div></div></div></div></div>
+    <div id="modal-s4tiva" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-s4tiva')">&times;</span>
+            <div class="modal-header"><h3>S4TIVA</h3><span class="role-modal" id="rm-s4tiva">Selector, DJ</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1AuWhsM2tu/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+                        <a href="https://www.instagram.com/s4tiva.22ent/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                    </div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-s4tiva"></div></div>
+            </div>
+        </div>
+    </div>
 
+    <div id="modal-leen" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-leen')">&times;</span>
+            <div class="modal-header"><h3>LEE NGUYEN</h3><span class="role-modal" id="rm-leen">Producer, DJ</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links"><a href="https://www.facebook.com/share/1ZH3XQuZeu/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a></div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-leen"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-sion" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-sion')">&times;</span>
+            <div class="modal-header"><h3>SION</h3><span class="role-modal" id="rm-sion">Producer, DJ</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1BdXGiTT4u/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+                        <a href="https://www.instagram.com/sion_lvp/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                    </div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-sion"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-alicoinslin" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-alicoinslin')">&times;</span>
+            <div class="modal-header"><h3>ALICOINSLIN</h3><span class="role-modal" id="rm-ali">DJ</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1AzfYgkbhL/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+                        <a href="https://www.instagram.com/alicoinslin/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                    </div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-ali"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-jayt" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-jayt')">&times;</span>
+            <div class="modal-header"><h3>JayT</h3><span class="role-modal" id="rm-jayt">DJ</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links"><a href="https://www.facebook.com/share/18QNRNecXV/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a></div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-jayt"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-dream" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-dream')">&times;</span>
+            <div class="modal-header"><h3>Dream</h3><span class="role-modal" id="rm-dream">Guitarist</span></div>
+            <div class="modal-grid">
+                <div class="modal-section"><h4 class="lang-con">Kết nối</h4>
+                    <div class="social-links"><a href="https://www.facebook.com/share/1ChTjARzuP/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a></div>
+                </div>
+                <div class="modal-section"><h4 class="lang-about">Về nghệ sĩ</h4><div class="info-box bio-content" id="bio-dream"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Khởi tạo AOS
+        AOS.init({ duration: 1000, once: false });
+
         let currentLang = 'vi';
         const trans = {
             en: {
                 mTitle: "EXPERIENCE POSITIONING",
                 mDesc: "<strong>22 Entertainment VN</strong> is more than just an event organizer; we are lifestyle designers. Driven by the philosophy <strong>'To high end and again!'</strong>, we are committed to delivering elite entertainment standards, where every moment is curated to become a captivating emotional loop.",
                 mQuote: "\"Music is the conduit, culture is the language connecting like-minded souls.\"",
-                mDesc2: "At Ham Tien, Mui Ne, we transform untouched natural spaces into contemporary art sanctuaries, where 'High-end' values are reimagined sustainably and passionately through every event.",
+                mDesc2: "At Ham Tien, Mui Né, we transform untouched natural spaces into contemporary art sanctuaries, where 'High-end' values are reimagined sustainably and passionately through every event.",
                 aTitle: "INTEGRATED ECOSYSTEM",
                 aI1h: "✧ Curation", aI1p: "Featuring Reggae, Dub, Afro, Deep House, and the art of Vinyl performance.",
                 aI2h: "✧ Cultural Workshop", aI2p: "Celebrating local craftsmanship, fine arts, Tattoo art, and creative mindset sessions.",
@@ -227,7 +323,7 @@
                 c2h: "Private & Exclusive", c2p: "Tailor-made experiences for secret spaces. Emphasizing sophistication, intimacy, and deep personal connection.",
                 c2tags: ["Secret Pool Parties", "Windy Hill BBQ", "Art Camping / Glamping", "Sunset Gatherings"],
                 bTitle: "22 Brotherhood", bSub: "Artist Collective", bDetail: "VIEW DETAILS",
-                rS4: "Selector, DJ", rLee: "Producer, DJ", rSion: "Producer, DJ", rAli: "DJ", r2c: "DJ, Young Talent", rGK: "Guitarist, Young Talent",
+                rS4: "Selector, DJ", rLee: "Producer, DJ", rSion: "Producer, DJ", rAli: "DJ", rJayt: "DJ, Young Talent", rDream: "Guitarist, Young Talent",
                 btsT: "Behind the Scenes",
                 bts1h: "Production & Ops", bts1p: "Strategic team managing project flow and event coordination.",
                 bts2h: "Media Team", bts2p: "Capturing and storytelling moments through visuals and video.",
@@ -239,8 +335,8 @@
                 bioLee: "🎧 Resident DJ at Nirvana Beach Club, Mui Ne.\n💎 Original core member (OG) of 22 Entertainment VN.\n🌊 Two decades of mastering the art of sound.\n🌀 Open Format | Club Music | Vibe Specialist.\nExperience isn't just numbers; it's the rhythm.",
                 bioSion: "🎧 House & Open Format DJ.\n💎 Talented artist of 22 Entertainment VN.\n🌊 10 years of experience in HCMC's high-energy club scene.\n🌀 House | Open Format | Cross-cultural Mixes.\nA bridge bringing Vietnamese music to the global stage.",
                 bioAli: "🎧 Resident DJ at Pineapple Beach Bar, Mui Ne.\n💎 Rising talent in Mui Ne.\n🌊 Soulful musical mindset within modern rhythms.\n🌀 Afro Beats | Indie Vibes | Minimal.\n\"Art in every beat, soul in every set.\"",
-                bio2c: "🎧 Techno, Afro House, House\n💎 16-year-old rising talent of 22 Entertainment.\nGive your all to music; finding your passion in youth is a blessing.",
-                bioGk: "🎧 Specialty: Jazz, Blues, Jamming with DJs on electric guitar.\n💎 15-year-old electric guitar talent of 22 Entertainment.\n\"At a young age, when music is in your blood, shining on stage is every artist's big dream.\""
+                bioJayt: "🎧 Techno, Afro House, House\n💎 16-year-old rising talent of 22 Entertainment.\nGive your all to music; finding your passion in youth is a blessing.",
+                bioDream: "🎧 Specialty: Jazz, Blues, Jamming with DJs on electric guitar.\n💎 15-year-old electric guitar talent of 22 Entertainment.\n\"At a young age, when music is in your blood, shining on stage is every artist's big dream.\""
             },
             vi: {
                 mTitle: "ĐỊNH VỊ TRẢI NGHIỆM",
@@ -258,7 +354,7 @@
                 c2h: "Riêng Tư & Đặc Quyền", c2p: "Những trải nghiệm được \"đo ni đóng giày\" cho từng không gian bí mật. Đề cao sự tinh tế, ấm cúng và kết nối cá nhân sâu sắc.",
                 c2tags: ["Tiệc hồ bơi bí mật (Secret Pool Party)", "BBQ Đồi Gió Party", "Camping / Glamping Nghệ Thuật", "Tiệc hoàng hôn (Sunset Gathering)"],
                 bTitle: "22 Brotherhood", bSub: "Đội ngũ Nghệ sĩ", bDetail: "XEM CHI TIẾT",
-                rS4: "Selector, DJ", rLee: "Producer, DJ", rSion: "Producer, DJ", rAli: "DJ", r2c: "DJ", rGK: "Guitarist",
+                rS4: "Selector, DJ", rLee: "Producer, DJ", rSion: "Producer, DJ", rAli: "DJ", rJayt: "DJ", rDream: "Guitarist",
                 btsT: "Phía sau sân khấu",
                 bts1h: "Tổ chức & Vận hành", bts1p: "Đội ngũ chiến lược, quản lý dự án và điều phối dòng chảy của sự kiện.",
                 bts2h: "Team Media", bts2p: "Lưu giữ và kể lại câu chuyện những khoảnh khắc qua hình ảnh và video.",
@@ -270,8 +366,8 @@
                 bioLee: "🎧 Resident DJ tại Nirvana Beach Club, Mũi Né.\n💎 Thành viên nòng cốt đời đầu (OG) của 22 Entertainment VN.\n🌊 2 thập kỷ làm chủ nghệ thuật âm thanh.\n🌀 Open Format | Club Music | Chuyên gia bắt \"vibe\".\nKinh nghiệm không chỉ là những con số; nó chính là nhịp điệu.",
                 bioSion: "🎧 House & Open Format DJ.\n💎 Nghệ sĩ tài năng của 22 Entertainment VN.\n🌊 10 năm \"chinh chiến\" và làm chủ các sân khấu Club sôi động tại HCMC.\n🌀 House | Open Format | Cross-cultural Mixes.\nCầu nối đưa âm nhạc Việt Nam vươn tầm thế giới.",
                 bioAli: "🎧 Resident DJ tại Pineapple Beach Bar, Mũi Né.\n💎 DJ tài năng đang phát triển mạnh mẽ tại Mũi Né.\n🌊 Tư duy âm nhạc giàu tâm hồn trong nhịp điệu hiện đại.\n🌀 Afro Beats | Indie Vibes | Minimal.\n\"Nghệ thuật trong từng nhịp điệu, tâm hồn trong mỗi set nhạc.\"",
-                bio2c: "​🎧 Techno, Afro House, House\n💎 Tài năng trẻ DJ chỉ mới 16 tuổi của 22 Entertainment.\nHết mình cùng âm nhạc, tuổi trẻ tìm được đam mê là một may mắn.",
-                bioGk: "🎧 Sở trường: Jazz, Blues, Jam DJ bằng chiếc guitar điện trên tay.\n💎 Tài năng guitar điện trẻ chỉ mới 15 tuổi của 22 Entertainment.\n\"Ở tuổi trẻ, khi âm nhạc đã ở trong máu, tỏa sáng trên sân khấu đúng là một ước mơ lớn của mọi nghệ sỹ.\""
+                bioJayt: "​🎧 Techno, Afro House, House\n💎 Tài năng trẻ DJ chỉ mới 16 tuổi của 22 Entertainment.\nHết mình cùng âm nhạc, tuổi trẻ tìm được đam mê là một may mắn.",
+                bioDream: "🎧 Sở trường: Jazz, Blues, Jam DJ bằng chiếc guitar điện trên tay.\n💎 Tài năng guitar điện trẻ chỉ mới 15 tuổi của 22 Entertainment.\n\"Ở tuổi trẻ, khi âm nhạc đã ở trong máu, tỏa sáng trên sân khấu đúng là một ước mơ lớn của mọi nghệ sỹ.\""
             }
         };
 
@@ -298,7 +394,7 @@
             document.querySelectorAll('.lang-detail').forEach(el => el.innerText = d.bDetail);
             document.getElementById('r-s4tiva').innerText = d.rS4; document.getElementById('r-leen').innerText = d.rLee;
             document.getElementById('r-sion').innerText = d.rSion; document.getElementById('r-ali').innerText = d.rAli;
-            document.getElementById('r-2c').innerText = d.r2c; document.getElementById('r-gk').innerText = d.rGK;
+            document.getElementById('r-jayt').innerText = d.rJayt; document.getElementById('r-dream').innerText = d.rDream;
             document.getElementById('bts-title').innerText = d.btsT;
             document.getElementById('bts1-h').innerText = d.bts1h; document.getElementById('bts1-p').innerText = d.bts1p;
             document.getElementById('bts2-h').innerText = d.bts2h; document.getElementById('bts2-p').innerText = d.bts2p;
@@ -312,7 +408,7 @@
             document.querySelectorAll('.lang-about').forEach(el => el.innerText = d.modalAbout);
             document.getElementById('rm-s4tiva').innerText = d.rS4; document.getElementById('rm-leen').innerText = d.rLee;
             document.getElementById('rm-sion').innerText = d.rSion; document.getElementById('rm-ali').innerText = d.rAli;
-            document.getElementById('rm-2c').innerText = d.r2c; document.getElementById('rm-gk').innerText = d.rGK;
+            document.getElementById('rm-jayt').innerText = d.rJayt; document.getElementById('rm-dream').innerText = d.rDream;
             updateBios(d);
         }
 
@@ -321,15 +417,14 @@
             document.getElementById('bio-leen').innerText = d.bioLee;
             document.getElementById('bio-sion').innerText = d.bioSion;
             document.getElementById('bio-ali').innerText = d.bioAli;
-            document.getElementById('bio-2c').innerText = d.bio2c;
-            document.getElementById('bio-gk').innerText = d.bioGk;
+            document.getElementById('bio-jayt').innerText = d.bioJayt;
+            document.getElementById('bio-dream').innerText = d.bioDream;
         }
 
         function openModal(id) { document.getElementById(id).style.display = "block"; document.body.style.overflow = "hidden"; }
         function closeModal(id) { document.getElementById(id).style.display = "none"; document.body.style.overflow = "auto"; }
         window.onclick = function(e) { if (e.target.className === 'modal') { e.target.style.display = "none"; document.body.style.overflow = "auto"; } }
         
-        // Khởi tạo Bio khi load trang
         window.onload = function() { updateBios(trans.vi); }
     </script>
 </body>
